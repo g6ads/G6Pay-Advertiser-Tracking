@@ -6,7 +6,7 @@
 //  Copyright 2011 G6 Media. All rights reserved.
 
 
-
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonDigest.h>
 
@@ -19,9 +19,9 @@
 }
 
 
-
 @property (retain) NSURLConnection *connection;
 @property (retain) NSMutableData* data;
 
+-(void)trackWithAppId:(NSString *) appId: (NSString *) secretKey;
 
 @end

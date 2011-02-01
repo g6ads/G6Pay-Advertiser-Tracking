@@ -8,21 +8,11 @@
 
 #import "G6Pay.h"
 
-const NSString *secret_key=@"REPLACE_WITH_YOUR_APP_SECRET_CODE";
-const NSString *application_id=@"REPLACE_WITH_YOUR_ADVERTISER_APP_ID";
 const NSString *pay_per_install_url=@"http://g6pay.com/api/installconfirm";
 
 @implementation G6Pay
 
 @synthesize connection, data;
-
-//function to be called to initiate the asynchronous installation confirmation call
-
--(void)track {
-	
-	[self payPerInstall:application_id];
-	
-}
 
 //generates the SHA256 hash
 
@@ -41,13 +31,13 @@ const NSString *pay_per_install_url=@"http://g6pay.com/api/installconfirm";
 	
 }
 
--(void)payPerInstall:(NSString *) appId {
+-(void)payPerInstall:(NSString *) appId : (NSString *) secretKey  {
 	
 	UIDevice *device = [UIDevice currentDevice];
 	NSString *uniqueIdentifier = [device uniqueIdentifier];
 	
 	//prepare the string for SHzA256 conversion
-	NSString *toHash = [NSString stringWithFormat:@"%@%@%@", appId, uniqueIdentifier, secret_key];
+	NSString *toHash = [NSString stringWithFormat:@"%@%@%@", appId, uniqueIdentifier, secretKey];
 	//send for conversion, generate hash
 	NSString *hash = [self hashGen:toHash];
 	
@@ -59,6 +49,13 @@ const NSString *pay_per_install_url=@"http://g6pay.com/api/installconfirm";
 	
 }
 
+//function to be called to initiate the asynchronous installation confirmation call
+
+-(void)trackWithAppId:(NSString *) appId: (NSString *) secretKey{
+	
+	[self payPerInstall:appId:secretKey];
+	
+}
 
 - (void)connection:(NSURLConnection *)theConnection	didReceiveData:(NSData *)incrementalData {
 	
@@ -69,10 +66,6 @@ const NSString *pay_per_install_url=@"http://g6pay.com/api/installconfirm";
 
 
 - (void)connectionDidFinishLoading:(NSURLConnection*)theConnection {
-	
-	
-	//ASCII Method
-    NSString *result= [[NSString alloc] initWithData:self.data encoding:NSASCIIStringEncoding];
 	
 	
 
